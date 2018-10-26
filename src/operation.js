@@ -1,40 +1,90 @@
+/** 浮点数的相关操作，为了一定程度上提高精确
+ * @Author: c.y
+ * @Date: 2018-10-24
+ * @Last Modified by: c.y
+ * @Last Modified time: 2018-10-24
+ */
+
 export default {
     /**
-     * js中浮点数精确计算,例如 0.1 + 0.2 = 0.30000000000000004就是有误差所致
-     * @param num1
-     * @param num2
+     * 浮点数的加法
+     * 例如 0.1 + 0.2 = 0.30000000000000004就是有误差所致
+     * @param arg1
+     * @param arg2
      * @returns {*}
      */
-    add(num1, num2) {
-        var r1, r2, m;
-        if (Number.isInteger(num1) || Number.isInteger(num2)) {
-            return num1 + num2;
+    accAdd(arg1, arg2) {
+        let r1;
+        let r2;
+        let m;
+        try {
+            r1 = arg1.toString().split('.')[1].length;
         }
-        r1 = ('' + num1).split('.')[1].length;
-        r2 = ('' + num2).split('.')[1].length;
-
+        catch (e) {
+            r1 = 0;
+        }
+        try {
+            r2 = arg2.toString().split('.')[1].length;
+        }
+        catch (e) {
+            r2 = 0;
+        }
         m = Math.pow(10, Math.max(r1, r2));
-        return (num1 * m + num2 * m) / m;
+        return (arg1 * m + arg2 * m) / m;
     },
-    /**
-     * 判断一个数是否是整数
-     * @param num
-     * @returns {boolean}
-     */
-    isInteger(num) {
-        return parseInt(x, 10) === x;
+    //减法函数
+    accSub(arg1, arg2) {
+        let r1;
+        let r2;
+        let m;
+        let n;
+        try {
+            r1 = arg1.toString().split('.')[1].length;
+        } catch (e) {
+            r1 = 0;
+        }
+        try {
+            r2 = arg2.toString().split('.')[1].length;
+        } catch (e) {
+            r2 = 0;
+        }
+        m = Math.pow(10, Math.max(r1, r2));
+        n = (r1 >= r2) ? r1 : r2;
+        return ((arg1 * m - arg2 * m) / m).toFixed(n);
     },
-    /**
-     * 使用js来生成UUID
-     * @param prefix
-     * @returns {string}
-     */
-    generateID(prefix) {
-    prefix = prefix || "prefix"
-    // Math.random() + Math.random() => [0,2)
-    return String(Math.random() + Math.random()).replace(/\d\.\d{4}/, prefix)
-}
-}
-
-// add demo
-console.log(add(0.15, 0.2256)); //0.3756
+    // 浮点数的乘法
+    accMul(arg1, arg2) {
+        let m = 0;
+        let s1 = arg1.toString();
+        let s2 = arg2.toString();
+        try {
+            m += s1.split('.')[1].length;
+        } catch (e) {
+        }
+        try {
+            m += s2.split('.')[1].length;
+        } catch (e) {
+        }
+        return Number(s1.replace('.', '')) * Number(s2.replace('.', '')) / Math.pow(10, m);
+    },
+    // 浮点数的除法
+    accDiv(arg1, arg2) {
+        let t1 = 0;
+        let t2 = 0;
+        let r1;
+        let r2;
+        try {
+            t1 = arg1.toString().split(".")[1].length;
+        }
+        catch (e) {
+        }
+        try {
+            t2 = arg2.toString().split(".")[1].length;
+        }
+        catch (e) {
+        }
+        r1 = Number(arg1.toString().replace(".", ""));
+        r2 = Number(arg2.toString().replace(".", ""));
+        return (r1 / r2) * Math.pow(10, t2 - t1);
+    }
+};
